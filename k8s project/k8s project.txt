@@ -1,0 +1,46 @@
+Setup and managed docker containers for django applications in kubernetes pods.
+Managed deployment, replication, autohealing, autoscaling for kubernetes cluster.
+Managed network and services with host IP allocation.
+
+
+minikube project
+
+ubuntu@ip-172-31-41-236:~$ git clone https://github.com/LondheShubham153/django-todo-cicd
+ubuntu@ip-172-31-41-236:~$ cd Django-to-do
+ubuntu@ip-172-31-41-236:~/Django-to-do$ docker build -t aniket8451/django-todo:latest .
+ubuntu@ip-172-31-41-236:~/Django-to-do$ docker run -d -p 8000:8000 aniket8451/django-todo:latest
+ubuntu@ip-172-31-41-236:~/Django-to-do$ curl -L http://43.205.240.121:8000        //////to check reachability
+ubuntu@ip-172-31-41-236:~/Django-to-do$ mkdir k8s
+ubuntu@ip-172-31-41-236:~/Django-to-do$ cd k8s
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ docker login -u "myusername" -p "mypassword" docker.io   // login docker hub
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ docker push aniket8451/django-todo
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ vim pod.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl apply -f pod.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl get pods
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ vim deployment.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl apply -f deployment.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl get deployments
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ docker system prune -a ///// This will remove: all stopped containers,all networks not used by at least one container
+, images without at least one container associated to them, all build cache ---run this if "The ImagePullBackOff Error" or "ErrImagePull"
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl get pods -o wide  //returns all pods with ip and status
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl get svc // returns runnig services with ip in cluster
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ vim service.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl apply -f service.yaml
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ kubectl get svc
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ minikube service todo-service --url
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ curl -L http://192.168.49.2:30007    
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ sudo vim /etc/hosts
+insert url with host name it will run locally
+http://192.168.49.2:30007 todo-app.com                 //host ip allocation
+ubuntu@ip-172-31-41-236:~/Django-to-do/k8s$ curl -L todo-app.com:30007  //runs only locally
+
+
+
+
+
+
+
+
+
+kubectl describe pod todo-pod  command
+docker login -u "aniket8451" -p "Aniket8451" docker.io

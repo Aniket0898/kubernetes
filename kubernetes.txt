@@ -1,0 +1,88 @@
+kubernetes
+online platforms 
+
+> kubernetes playground
+> play with k8s
+> play with kubernetes classroom
+
+cloud based k8s service
+
+> GKE - google kubernetes service
+> AKS - Azure kubernetes service
+> Amazon EKS - Elastic kubernetes services
+
+kubernetes on premises server
+
+> minicube
+> kubeadm
+
+
+*****************************************************************************************************************kubernetes is an 
+kubernetes is a container orchestration tool
+
+client server architecture
+
+1. Server
+2. Client
+
+> Master (Server)
+  API - Server : responsible for communication between nodes and user and modules within master 
+  etcd cluster : stores metatdeta of nodes, only api server can acess etcd cluster
+  controller manager : maintain actual state and desired state of nodes
+  kube scheduler : create pods and container
+
+> Nodes (clients)
+  kube proxy -responsible for routing between pod and master
+  kubelet -  An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod. The kubelet takes a set of PodSpecs that are      kubelate port 10255
+  container engine - it is a containerization tools i.e docker,rocket etc
+  pod - smallest unit consist container
+
+
+pod
+> Smallest unit in kubernetes
+> in kubernetes control unit is pod not container
+> pod is a group of one or more containers that are deployed on same host
+> pod can consist tightly coupled multiple containers
+> one pod contains only one container usually.
+> pod runs on node controlled by master or server
+> A cluster is a group of nodes
+> kubernetes communicates with pods not with containers
+> kubernetes cannot start container without pod
+> cluster has one server and multiple client nodes
+
+imp**********************************************************************************************************************
+
+Script written for kubernetes is in either JSON or YML file kubernetes written in golang.****
+
+kubectl - single cloud
+kubeadm - on premise
+kubefed - federated
+
+****************************************************************************************************************
+commands
+
+kubectl apply -f podex.yml   // to apply yml file in k8s
+kubectl get podes --show- labels // returns all pods with labels 
+kubectl get nodes --show- labels // returns all nodes with labels 
+kubectl label pods delhipod myname=aniket // assigning label on existing object here assign lable name aniket on pod delhipod
+kubectl get pods -l env=development // get the pods with label assigned development
+kubectl delete pods -l env=development // delete pods with lable development
+kubectl delete pods -l env!=development //delete pods with lables except development
+kubectl get pods // returns list of existing pods
+
+************************************************************************************************************************
+selectors
+
+Type of selectors
+  equality based
+  set based 
+
+1. Equality based (=, !=)
+e.g
+>kubectl get pods -l env=development
+
+2. Set based(in, notin, exixts)
+e.g
+>kubectl get pods -l 'env in (development,testing)'
+>kubectl get pods -l 'env notin (development,testing)'
+>kubectl get pods -l 'env in (class=pods,name=aniket)'

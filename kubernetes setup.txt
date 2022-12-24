@@ -1,0 +1,61 @@
+setup on AWS EC2 instance
+> create a master and 2 nodes on EC2 instance
+create 3 ec2 instance using terraform
+note:- master should have 2 cpu and 4GB ram use t2.medium**********
+
+ 13.233.119.149 : master
+ 43.204.221.72 : Node 1
+ 13.232.235.184 : Node 2
+
+**********************************************************************************************************
+run commands on nodes and master
+
+sudo su
+apt-get update
+apt-get install apt-transport-https   // https required for intra cluster communication
+apt install docker.io -y  // install docker on all nodes and master
+docker --version   
+systemctl start docker   // start docker
+systemctl enable docker   //run docker
+systemctl status docker
+sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add // add key on master and nodes
+
+install kubernetes package through file consist link created with nano
+sudo su
+nano /etc/apt/sources.list.d/kubernetes.list
+deb http://apt.kubernetes.io/ kubernetes-xenial main
+apt-get update
+apt-get install -y kubelet kubeadm kubectl kubernetes-cni
+
+bootstrapping the master node (in master)
+kubeadm init
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/v0.8.0/Documentation/kube-flannel-rbac.yml
+
+to run on nodes to establish connection
+kubeadm join 172.31.0.187:6443 --token q5eh63.4gxjjz05ri0r95io --discovery-token-ca-cert-hash sha256:95dcb45e36b4a6c4e443adf8fa97cc1d2aa9466aee140dccde7829bb54d20c75
+
+kubeadm join 172.31.15.123:6443 --token 59gust.8llzvfntdkied5a7 --discovery-token-ca-cert-hash sha256:558e2aac3f42ebe4bc1f6ecaa2b3479ecf785d5e892b0ff999c025fbef0904f2
+
+
+kubeadm reset
+kubeadm init --pod-network-cidr=172.31.0.0/16 --apiserver-advertise-address=172.31.0.187 --kubernetes-version=v1.18.0
+
+
+
+
+********************************************************************************************************
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+sudo usermod -aG docker $USER && newgrp docker
+minikube start --driver=docker
+
+kubectl get po -A  //
