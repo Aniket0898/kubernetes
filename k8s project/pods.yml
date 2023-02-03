@@ -7,4 +7,4 @@ spec:
   - name: todo-app
     image: aniket8451/django-todo:latest
     ports:
-    - containerPort: 8000
+      - containerPort: 8000
